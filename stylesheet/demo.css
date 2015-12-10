@@ -1,0 +1,46 @@
+html, body {
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	font-family: 'Source Sans Pro', sans-serif, '微軟正黑體';
+}
+
+.brand {
+	display: inline-block;
+	margin: 0 15px 0 0;
+	padding: 1.5rem;
+	font-size: 2rem;
+	line-height: 1;
+}
+
+.panel {
+	display: inline-block;
+	float: right;
+	padding: 1.5rem;
+	vertical-align: bottom;
+	height: 2rem;
+}
+
+.btn {
+	display: inline-block;
+	padding: 0.5rem;
+	height: 1rem;
+	background: #000;
+	font-size: 1rem;
+	line-height: 1;
+	color: #FFF;
+	border: 1px solid #000;
+	border-radius: 4px;
+	cursor: pointer;
+	transition: transform 100ms;
+}
+
+.btn:active {
+	transform: scale(0.9, 0.9);
+}
+
+.footer {
+	padding: 1.618rem;
+	min-height: 400px;
+	background: #FFF;
+}
