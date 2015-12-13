@@ -1,8 +1,14 @@
 html, body {
+	overflow: hidden;
 	margin: 0;
 	padding: 0;
 	height: 100%;
 	font-family: 'Source Sans Pro', sans-serif, '微軟正黑體';
+}
+
+.container {
+	width: 100%;
+	height: 100%;
 }
 
 .brand {
@@ -17,12 +23,12 @@ html, body {
 	display: inline-block;
 	float: right;
 	padding: 1.5rem;
-	vertical-align: bottom;
 	height: 2rem;
 }
 
 .btn {
 	display: inline-block;
+	margin: 0 0.5rem;
 	padding: 0.5rem;
 	height: 1rem;
 	background: #000;
@@ -35,12 +41,78 @@ html, body {
 	transition: transform 100ms;
 }
 
-.btn:active {
-	transform: scale(0.9, 0.9);
+.ctrlPanel {
+	position: relative;
+	z-index: 622;
+	top: -100%;
+	left: 100%;
+	width: 38.2%;
+    height: 100%;
+    background: #333;
+	font-size: 2rem;
+	line-height: 1;
+	color: #FFF;
+	transition: left 500ms;
+	-ms-transition: left 500ms;
+	-moz-transition: left 500ms;
+	-webkit-transition: left 500ms;
 }
 
-.footer {
-	padding: 1.618rem;
-	min-height: 400px;
-	background: #FFF;
+.ctrlPanelHolder {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+.ctrlPanelHolder > * {
+	position: relative;
+	padding: 1.5rem;
+	width: calc(100% - 1.5rem * 2);
+}
+
+.cpHeader {
+	height: 2rem;
+	border-bottom: 1px solid #000;
+}
+
+.cpBody {
+	overflow: auto;
+	padding: 0 1.5rem;
+	max-height: calc(100% - 10rem);
+}
+
+.cpBody > *:last-child {
+	border: 0;
+}
+
+.cpContent {
+	padding: 0.5rem 0;
+	border-bottom: 1px solid #000;
+}
+
+.cpContent > div {
+	display: inline-block;
+	width: 38.2%;
+	font-size: 1rem;
+}
+
+.cpContent > input {
+    padding: 0.5rem;
+	border: 0;
+    border-radius: 2px;
+}
+
+.cpContent > span {
+	display: block;
+	padding: 0.5rem;
+	font-size: 1rem;
+	color: #999;
+}
+
+.cpFooter {
+	height: 2rem;
+	border-top: 1px solid #000;
+}
+.cpFooter > * {
+	float: right;
 }

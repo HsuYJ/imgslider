@@ -48,19 +48,27 @@ var Imgslider;
 			SliderHolder.setAttribute('class', Object.keys(Classes)[0]);
 			// build structure
 			build();
-			// bind event
-			bindEvent();
+			// handle event
+			handleEvt(1);
 			// first render
 			changeView();
 			// auto slide
-			if (Setting.autoStart) {
+			if (Setting.loop) {
 				autoSlide();
 			}
 		},
 
-		start: function() {
+		uninstall: function() {
 
-			Setting.autoStart = true;
+			window.clearInterval(State.timer);
+			window.clearInterval(State.leaveTimer);
+			handleEvt(0);
+			SliderHolder.innerHTML = '';
+		},
+
+		startLoop: function() {
+
+			Setting.loop = true;
 			autoSlide();
 		},
 
@@ -78,7 +86,7 @@ var Imgslider;
 		height: '480px',
 		
 		// auto slide
-		autoStart: true, // Boolean
+		loop: true, // Boolean
 		transitionTime: 500, // ms
 		duration: 3500, // ms
 
@@ -359,28 +367,30 @@ var Imgslider;
 		}
 	};
 
-	var bindEvent = function() {
+	var handleEvt = function(Switch) {
+
+		var handleEvtListener = (Switch ? 'add' : 'remove') + 'EventListener';
 		// sliderHolder
-		SliderHolder.addEventListener('mouseover', hover, false);
-		SliderHolder.addEventListener('mouseout', leave, false);
+		SliderHolder[handleEvtListener]('mouseover', hover, false);
+		SliderHolder[handleEvtListener]('mouseout', leave, false);
 
 		if (Setting.wheelSlide) {
-			SliderHolder.addEventListener('wheel', wheel, false);
+			SliderHolder[handleEvtListener]('wheel', wheel, false);
 		}
 
-		SliderHolder.addEventListener('touchstart', drag, false);
+		SliderHolder[handleEvtListener]('touchstart', drag, false);
 		// arrows
-		ArrowHolder.children[0].addEventListener('click', function() {
+		ArrowHolder.children[0][handleEvtListener]('click', function() {
 			switchImgByArrow(-1);
 		}, false);
-		ArrowHolder.children[1].addEventListener('click', function() {
+		ArrowHolder.children[1][handleEvtListener]('click', function() {
 			switchImgByArrow(1);
 		}, false);
 		// radioBtns
 		var radioBtns = RadioHolder.children;
 
 		for (var i = 0; i < radioBtns.length; i++) {
-			radioBtns[i].addEventListener(Setting.switchBy, switchImgByRadio, false);
+			radioBtns[i][handleEvtListener](Setting.switchBy, switchImgByRadio, false);
 		}
 	};
 
@@ -419,7 +429,7 @@ var Imgslider;
 
 	var stopSlide = function() {
 
-		Setting.autoStart = false;
+		Setting.loop = false;
 		window.clearInterval(State.timer);
 	};
 
@@ -442,7 +452,7 @@ var Imgslider;
 
 	var leave = function() {
 
-		if (Setting.autoStart) {
+		if (Setting.loop) {
 			autoSlide();
 		}
 
@@ -499,7 +509,7 @@ var Imgslider;
 
 		if (e.type === 'touchend') {
 
-			if (Setting.autoStart) {
+			if (Setting.loop) {
 				State.leaveTimer = window.setTimeout(leave, Setting.duration);
 			}
 
