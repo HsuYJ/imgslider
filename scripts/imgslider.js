@@ -56,6 +56,7 @@ var Imgslider;
 
 		uninstall: function() {
 
+			State.onLoop = false;
 			window.clearInterval(State.timer);
 			window.clearInterval(State.leaveTimer);
 			handleEvt(0);
