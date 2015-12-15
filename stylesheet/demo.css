@@ -75,7 +75,7 @@ html, body {
 }
 
 .cpBody {
-	overflow: scroll;
+	overflow: auto;
 	padding: 0 1.5rem;
 	max-height: calc(100% - 10rem);
 	background: #000;
