@@ -14,5 +14,12 @@ Imgslider.install();
 ```
 or, without class name:
 ```
-Imgslider.install(target);
+<body>
+  <div id="id-of-your-slider"></div>
+</body>
+```
+```
+var slider = document.getElementById('id-of-your-slider');
+
+Imgslider.install(slider);
 ```
