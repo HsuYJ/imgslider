@@ -46,7 +46,7 @@ window.onload = function() {
 	var imgs = [
 			{
 				imgURL: './images/slide.jpg',
-				text: 'This is Imgslider',
+				title: 'This is Imgslider',
 				story: 'Imgslider makes it possible to show many images in only one block.',
 				linkURL: null,
 				tip: null,
@@ -54,7 +54,7 @@ window.onload = function() {
 			},
 			{
 				imgURL: './images/slide2.jpg',
-				text: 'This is Imgslider with no \'story\'',
+				title: 'This is Imgslider with no "story"',
 				story: null,
 				linkURL: null,
 				tip: null,
@@ -62,10 +62,10 @@ window.onload = function() {
 			},
 			{
 				imgURL: './images/notebook-731212_1920.jpg',
-				text: null,
-				story: 'This is Imgslider with no \'text\'',
+				title: null,
+				story: 'This is Imgslider with no "title"',
 				linkURL: null,
-				tip: 'This is Imgslider with no \'text\'',
+				tip: 'This is Imgslider with no "title"',
 				openInBlank: null
 			},
 	];

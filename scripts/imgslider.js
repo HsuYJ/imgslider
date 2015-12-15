@@ -29,32 +29,28 @@ var Imgslider;
 
 			Setting.imgs.push({
 				imgURL: p.imgURL,
-				text: p.text || null,
+				title: p.title || null,
 				story: p.story || null,
 				linkURL: p.linkURL || null,
-				tip: p.tip || p.text || null,
+				tip: p.tip || p.title || null,
 				openInBlank: p.openInBlank || Setting.openInBlank
 			});
 		},
 
 		install: function(target) {
 			// target element, if undefined, will search for first element has class 'imgslider'
-			// evaluate state, styles
-			evaluate();
-
-			generateStyleTag();
 			// get and set SliderHolder
 			SliderHolder = (target === undefined) ? document.getElementsByClassName('imgslider')[0] : target;
 			SliderHolder.setAttribute('class', Object.keys(Classes)[0]);
-			// build structure
+			evaluate();
+			generateStyleTag();
 			build();
-			// handle event
 			handleEvt(1);
 			// first render
 			changeView();
 			// auto slide
 			if (Setting.loop) {
-				autoSlide();
+				startLoop();
 			}
 		},
 
@@ -63,18 +59,28 @@ var Imgslider;
 			window.clearInterval(State.timer);
 			window.clearInterval(State.leaveTimer);
 			handleEvt(0);
+			StyleTag.parentNode.removeChild(StyleTag);
 			SliderHolder.innerHTML = '';
 		},
 
 		startLoop: function() {
 
 			Setting.loop = true;
-			autoSlide();
+			startLoop();
 		},
 
-		stop: function() {
+		stopLoop: function() {
 
-			stopSlide();
+			Setting.loop = false;
+			pauseLoop();
+		},
+
+		loop: function(Switch) {
+
+			if (Switch) {
+				Setting.loop = true;
+				startLoop();
+			}
 		}
 	};
 
@@ -178,7 +184,7 @@ var Imgslider;
 			color: '#FFF',
 			'text-decoration': 'none'
 		},
-		// texts
+		// title
 		'sliderHolder > * > *:nth-child(3) > a > h2': {
 			position: 'relative',
 			margin: '1.5rem 0',
@@ -232,7 +238,7 @@ var Imgslider;
 
 	var State = {
 
-		styleTagGenerated: false,
+		onLoop: false,
 
 		maxCount: undefined, // will set by install()
 
@@ -251,6 +257,7 @@ var Imgslider;
 		leaveTimer: null,
 	};
 
+	var StyleTag = null;
 	var SliderHolder = null;
 	var ArrowHolder = null;
 	var ImgHolder = null;
@@ -275,8 +282,9 @@ var Imgslider;
 
 	var generateStyleTag = function() {
 		
-		var styleTag = createEl('style');
 		var styleText = '';
+
+		StyleTag = createEl('style');
 
 		for (var className in Classes) {
 			styleText += '.' + className + ' {\n';
@@ -300,8 +308,8 @@ var Imgslider;
 
 		}
 
-		styleTag.appendChild(document.createTextNode(styleText));
-		document.head.appendChild(styleTag);
+		StyleTag.appendChild(document.createTextNode(styleText));
+		document.head.appendChild(StyleTag);
 	};
 
 	var build = function(target) {
@@ -332,11 +340,11 @@ var Imgslider;
 			}
 			ImgHolder.appendChild(img);
 
-			if (imgs[i].text) {
-				var text = createEl('h2');
+			if (imgs[i].title) {
+				var title = createEl('h2');
 
-				text.appendChild(document.createTextNode(imgs[i].text));
-				img.appendChild(text);
+				title.appendChild(document.createTextNode(imgs[i].title));
+				img.appendChild(title);
 			}
 
 			if (imgs[i].story) {
@@ -390,7 +398,15 @@ var Imgslider;
 		var radioBtns = RadioHolder.children;
 
 		for (var i = 0; i < radioBtns.length; i++) {
-			radioBtns[i][handleEvtListener](Setting.switchBy, switchImgByRadio, false);
+
+			(function() {
+				var count = i;
+
+				radioBtns[i][handleEvtListener](Setting.switchBy, function() {
+
+					switchImgTo(count);
+				}, false);
+			}());
 		}
 	};
 
@@ -417,19 +433,17 @@ var Imgslider;
 		changeView();
 	};
 
-	var autoSlide = function() {
+	var startLoop = function() {
 
+		if (State.onLoop) { return; }
+
+		State.onLoop = true;
 		State.timer = window.setInterval(slide, Setting.duration);
 	};
 
-	var pauseSlide = function() {
+	var pauseLoop = function() {
 
-		window.clearInterval(State.timer);
-	};
-
-	var stopSlide = function() {
-
-		Setting.loop = false;
+		State.onLoop = false;
 		window.clearInterval(State.timer);
 	};
 
@@ -446,15 +460,13 @@ var Imgslider;
 
 	var hover = function() {
 
-		pauseSlide();
+		pauseLoop();
 		switchOpacity(1);
 	};
 
 	var leave = function() {
 
-		if (Setting.loop) {
-			autoSlide();
-		}
+		if (Setting.loop) { startLoop(); }
 
 		switchOpacity(0);
 	};
@@ -499,6 +511,7 @@ var Imgslider;
 				});
 				return;
 			}
+
 			State.onTouchmove = true;
 			// main process
 			movePos = e.changedTouches[0].clientX;
@@ -508,7 +521,6 @@ var Imgslider;
 		}
 
 		if (e.type === 'touchend') {
-
 			if (Setting.loop) {
 				State.leaveTimer = window.setTimeout(leave, Setting.duration);
 			}
@@ -531,15 +543,15 @@ var Imgslider;
 		}
 	};
 
-	var switchImgByRadio = function() {
-
-		State.count = this.getAttribute('count_imgslider') * 1;
-		changeView();
-	};
-
 	var switchImgByArrow = function(Switch) {
 
 		State.count += Switch;
+		changeView();
+	};
+
+	var switchImgTo = function(countNum) {
+
+		State.count = countNum;
 		changeView();
 	};
 
@@ -655,6 +667,26 @@ var Imgslider;
 			'-moz-transform: ' + value + ';' +
 			'-webkit-transform: ' + value + ';';
 	};
+
+	var IsTouch = (function() {
+
+		var detector = function(e) {
+
+			if (e.type === 'mousemove') {
+				IsTouch = false;
+			} else if (e.touches[0]) {
+				IsTouch = true;
+			}
+
+			document.removeEventListener('mousemove', detector, false);
+			document.removeEventListener('touchstart', detector, false);
+
+			console.log('IsTouch: ', IsTouch);
+		};
+
+		document.addEventListener('mousemove', detector, false);
+		document.addEventListener('touchstart', detector, false);
+	})();
 
 	/*
 		polyfills

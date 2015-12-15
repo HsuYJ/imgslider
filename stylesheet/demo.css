@@ -35,7 +35,6 @@ html, body {
 	font-size: 1rem;
 	line-height: 1;
 	color: #FFF;
-	border: 1px solid #000;
 	border-radius: 4px;
 	cursor: pointer;
 	transition: transform 100ms;
@@ -79,6 +78,7 @@ html, body {
 	overflow: auto;
 	padding: 0 1.5rem;
 	max-height: calc(100% - 10rem);
+	background: #000;
 }
 
 .cpBody > *:last-child {
@@ -87,7 +87,7 @@ html, body {
 
 .cpContent {
 	padding: 0.5rem 0;
-	border-bottom: 1px solid #000;
+	border-bottom: 1px solid #333;
 }
 
 .cpContent > div {
