@@ -74,14 +74,6 @@ var Imgslider;
 
 			Setting.loop = false;
 			pauseLoop();
-		},
-
-		loop: function(Switch) {
-
-			if (Switch) {
-				Setting.loop = true;
-				startLoop();
-			}
 		}
 	};
 
