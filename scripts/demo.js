@@ -24,11 +24,6 @@ window.onload = function() {
 		main
 	*/
 
-	document.addEventListener('touchmove', function(e) {
-		
-		e.preventDefault();
-	}, false);
-
 	var body = document.body;
 
 	var container = createEl('', 'container');
